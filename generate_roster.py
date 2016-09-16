@@ -166,11 +166,10 @@ class Roster:
                 playing = list(self.lines[i-1].sitting)
                 sitting = [x for x in self.players if x not in playing]
                 sitting.sort()
-                # Add the next two least-played players
-                playing.append(sitting[0])
-                sitting = sitting[1:]
-                playing.append(sitting[0])
-                sitting = sitting[1:]
+                while len(playing) < MAX_ON_FIELD:
+                    # Add the next least-played players from the sitting list
+                    playing.append(sitting[0])
+                    sitting = sitting[1:]
             # Goalie
             player = self.findNextGoalie(playing)
             line.addToPosition(player, 0)
@@ -213,8 +212,9 @@ class Roster:
 
 
 
-roster = Roster(10)
-roster.generateOptimized()
-print("Roster:")
-print(str(roster))
-roster.printDetailedStats()
+for i in range(6, 11):
+    roster = Roster(i)
+    roster.generateOptimized()
+    print("Roster:")
+    print(str(roster))
+    roster.printDetailedStats()
