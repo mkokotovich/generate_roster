@@ -119,7 +119,7 @@ class Roster:
 
 
     def __str__(self):
-        msg = ""
+        msg = "Roster with {0} players\n".format(self.numberOfPlayers)
         for i in range(0, self.numberOfLines):
             msg += "Line {0}:\n".format(i+1)
             msg += str(self.lines[i])
@@ -212,9 +212,19 @@ class Roster:
 
 
 
+
+def printRandomPlayerOrder():
+    players = [line.rstrip('\n') for line in open('players.txt')]
+    random.shuffle(players)
+    for i in range(0, len(players)):
+        print("{0}: {1}".format(i, players[i]))
+    print("")
+
+
+printRandomPlayerOrder()
+
 for i in range(6, 11):
     roster = Roster(i)
     roster.generateOptimized()
-    print("Roster:")
     print(str(roster))
-    roster.printDetailedStats()
+    #roster.printDetailedStats()
