@@ -3,6 +3,7 @@ import operator
 
 MAX_ON_FIELD = 6
 POSITIONS = [x for x in range(MAX_ON_FIELD)]
+PRINT_WIDTH = 50
 
 class Player:
     playerId = "" 
@@ -48,8 +49,7 @@ class Line:
 
 
     def __str__(self):
-        msg =  "Playing: {0}\nSitting: {1}\n".format(", ".join(str(player) for position,player in self.playing.items()), ", ".join(str(player) for player in self.sitting))
-        return msg
+        return "Playing: {0}  -  Sitting: {1}".format(", ".join(str(player) for position,player in self.playing.items()), ", ".join(str(player) for player in self.sitting))
 
 
     def addPlayer(self, player):
@@ -121,8 +121,8 @@ class Roster:
     def __str__(self):
         msg = "Roster with {0} players\n".format(self.numberOfPlayers)
         for i in range(0, self.numberOfLines):
-            msg += "Line {0}:\n".format(i+1)
-            msg += str(self.lines[i])
+            #msg += "Line {0}: {1: >{2}}\n".format(i+1, str(self.lines[i]), PRINT_WIDTH)
+            msg += "Line {0}:{1}{2}\n".format(i+1, " "*4, str(self.lines[i]))
         return msg
 
 
@@ -223,7 +223,7 @@ def printRandomPlayerOrder():
 
 printRandomPlayerOrder()
 
-for i in range(6, 11):
+for i in range(6, 10):
     roster = Roster(i)
     roster.generateOptimized()
     print(str(roster))
