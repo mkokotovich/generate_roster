@@ -30,6 +30,10 @@ class Player:
     def countPosition(self, position):
         return self.positionsPlayed.count(position)
 
+
+    def numTimesPlayed(self):
+        return len(self.positionsPlayed)
+
     
     def detailedStats(self):
         return "Player {0} played {1} positions: {2}".format(self.playerId, len(self.positionsPlayed), ", ".join(str(pos) for pos in self.positionsPlayed))
@@ -135,21 +139,46 @@ class Roster:
 
 
     def findNextDefense(self, players):
-        defense = -1,100000
+        min_times_as_defense = 100000
+        possible_defenders = []
         for player in players:
             defense_count = player.countPosition(1) + player.countPosition(2)
-            if defense_count < defense[1]:
-                defense = player, defense_count
-        return defense[0]
+            if defense_count < min_times_as_defense:
+                possible_defenders = [player]
+                min_times_as_defense = defense_count
+            elif defense_count == min_times_as_defense:
+                possible_defenders.append(player)
+            if defense_count < min_times_as_defense:
+                possible_defenders.append(player)
+        return random.choice(possible_defenders)
 
 
     def findNextForward(self, players):
-        forward = -1,100000
+        min_times_as_forward = 100000
+        possible_forwards = []
         for player in players:
             forward_count = player.countPosition(3) + player.countPosition(4) + player.countPosition(5)
-            if forward_count < forward[1]:
-                forward = player, forward_count
-        return forward[0]
+            if forward_count < min_times_as_forward:
+                possible_forwards = [player]
+                min_times_as_forward = forward_count
+            elif forward_count == min_times_as_forward:
+                possible_forwards.append(player)
+            if forward_count < min_times_as_forward:
+                possible_forwards.append(player)
+        return random.choice(possible_forwards)
+
+
+    def findNextPlayer(self, players):
+        min_times_as_player = 100000
+        possible_players = []
+        for player in players:
+            player_count = player.numTimesPlayed()
+            if player_count < min_times_as_player:
+                possible_players = [player]
+                min_times_as_player = player_count
+            elif player_count == min_times_as_player:
+                possible_players.append(player)
+        return random.choice(possible_players)
 
 
     def generateOptimized(self):
@@ -168,8 +197,9 @@ class Roster:
                 sitting.sort()
                 while len(playing) < MAX_ON_FIELD:
                     # Add the next least-played players from the sitting list
-                    playing.append(sitting[0])
-                    sitting = sitting[1:]
+                    player = self.findNextPlayer(sitting)
+                    playing.append(player)
+                    sitting.remove(player)
             # Goalie
             player = self.findNextGoalie(playing)
             line.addToPosition(player, 0)
@@ -209,6 +239,7 @@ class Roster:
     def printDetailedStats(self):
         for player in self.players:
             print(player.detailedStats())
+        print("")
 
 
 
