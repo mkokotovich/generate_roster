@@ -243,18 +243,21 @@ class Roster:
 
 
 
-
 def printRandomPlayerOrder():
     players = [line.rstrip('\n') for line in open('players.txt')]
+    num_players = 0
     random.shuffle(players)
     for i in range(0, len(players)):
-        print("{0}: {1}".format(i, players[i]))
+        if not players[i].startswith("#"):
+            print("{0}: {1}".format(i, players[i]))
+            num_players += 1
     print("")
+    return num_players
 
 
-printRandomPlayerOrder()
+num_players = printRandomPlayerOrder()
 
-for i in range(6, 10):
+for i in range(6, num_players+1):
     roster = Roster(i)
     roster.generateOptimized()
     print(str(roster))
