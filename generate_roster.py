@@ -247,9 +247,9 @@ def printRandomPlayerOrder():
     players = [line.rstrip('\n') for line in open('players.txt')]
     num_players = 0
     random.shuffle(players)
-    for i in range(0, len(players)):
-        if not players[i].startswith("#"):
-            print("{0}: {1}".format(i, players[i]))
+    for player in players:
+        if not player.startswith("#"):
+            print("{0}: {1}".format(num_players, player))
             num_players += 1
     print("")
     return num_players
